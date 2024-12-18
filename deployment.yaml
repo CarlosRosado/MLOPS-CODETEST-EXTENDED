@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seedtag-text-classifier-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: seedtag-text-classifier
+  template:
+    metadata:
+      labels:
+        app: seedtag-text-classifier
+    spec:
+      containers:
+      - name: seedtag-text-classifier
+        image: carlosrosado/mlops-codetest-extended-web:latest
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+        ports:
+        - containerPort: 3000
+        - containerPort: 9090
