@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  title: SeedTag Text Classifier API
+  version: 1.0.0
+  description: API for making predictions using Scikit-Learn and PyTorch models.
+paths:
+  /sklearn:
+    post:
+      summary: Make predictions using the Scikit-Learn model
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrystalData'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictionResponse'
+  /pytorch:
+    post:
+      summary: Make predictions using the PyTorch model
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrystalData'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictionResponse'
+  /astromech:
+    post:
+      summary: Make predictions using either the Scikit-Learn or PyTorch model
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AstromechData'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictionResponse'
+components:
+  schemas:
+    CrystalData:
+      type: object
+      properties:
+        crystalData:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+            minItems: 4
+            maxItems: 4
+    AstromechData:
+      type: object
+      properties:
+        crystalData:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+            minItems: 4
+            maxItems: 4
+        model:
+          type: string
+          enum:
+            - sklearn
+            - pytorch
+    PredictionScores:
+      type: object
+      properties:
+        blue:
+          type: number
+        green:
+          type: number
+        yellow:
+          type: number
+    PredictionResponse:
+      type: object
+      properties:
+        prediction:
+          type: array
+          items:
+            type: string
+        scores:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionScores'
